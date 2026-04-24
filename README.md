@@ -89,6 +89,8 @@ Run automated tests:
 
 Use a **Web Service** on Render for this Spring Boot app.
 
+Render currently does **not** provide a native Spring Boot / Java runtime for this app flow, so deploy it with **Docker**.
+
 ### 1. Push the project to GitHub
 
 Render deploys from a Git repository, so push this folder to GitHub first.
@@ -102,25 +104,14 @@ In Render:
 - connect your GitHub repository
 - select this repository
 
-### 3. Set build and start commands
+### 3. Choose the runtime
 
 Use these values:
 
-- **Environment**: `Java`
-- **Build Command**: `./mvnw clean package -DskipTests`
-- **Start Command**: `java -jar target/whatsapp-chatbot-0.0.1-SNAPSHOT.jar`
+- **Environment**: `Docker`
+- **Dockerfile Path**: `./Dockerfile`
 
-If Render does not use the Linux Maven wrapper correctly, use:
-
-- **Build Command**: `mvn clean package -DskipTests`
-
-### 4. Set Java version
-
-This project uses Java `21`, so in Render add:
-
-- **Environment Variable**: `JAVA_VERSION=21`
-
-### 5. Deploy
+### 4. Deploy
 
 Click **Create Web Service**. After the build finishes, Render will give you a public URL such as:
 
@@ -130,7 +121,7 @@ Your webhook endpoint will then be:
 
 `https://your-service-name.onrender.com/webhook`
 
-### 6. Test the deployed API
+### 5. Test the deployed API
 
 Example:
 
