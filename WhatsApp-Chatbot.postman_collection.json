@@ -1,0 +1,467 @@
+{
+  "info": {
+    "_postman_id": "9a7d8f2e-1b84-4d87-a8f1-7d57261c5c20",
+    "name": "WhatsApp Chatbot Backend",
+    "description": "Postman collection for testing the WhatsApp chatbot backend assignment.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Hi -> Hello",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"sender\": \"+91-9876543210\",\n  \"message\": \"Hi\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/webhook",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "webhook"
+          ]
+        },
+        "description": "Checks the standard greeting flow."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Reply is Hello\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.reply).to.eql(\"Hello\");",
+              "});"
+            ]
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "Bye -> Goodbye",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"sender\": \"+91-9876543210\",\n  \"message\": \"Bye\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/webhook",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "webhook"
+          ]
+        },
+        "description": "Checks the exit flow."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Reply is Goodbye\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.reply).to.eql(\"Goodbye\");",
+              "});"
+            ]
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "Help -> Commands",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"sender\": \"+91-9876543210\",\n  \"message\": \"help\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/webhook",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "webhook"
+          ]
+        },
+        "description": "Lists the supported commands."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Reply lists supported commands\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.reply).to.eql(\"Available commands: Hi, Bye, Help\");",
+              "});"
+            ]
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "Unknown -> Fallback",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"sender\": \"+91-9876543210\",\n  \"message\": \"Hello World\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/webhook",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "webhook"
+          ]
+        },
+        "description": "Checks the fallback response for unsupported messages."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Reply is fallback text\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.reply).to.eql(\"I did not understand that. Try: Hi or Bye\");",
+              "});"
+            ]
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "Empty -> Validation",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"sender\": \"+91-9876543210\",\n  \"message\": \"\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/webhook",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "webhook"
+          ]
+        },
+        "description": "Checks the empty-message validation response."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Reply asks for a valid message\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.reply).to.eql(\"Please send a valid message.\");",
+              "});"
+            ]
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "Spaces Only -> Validation",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"sender\": \"+91-9876543210\",\n  \"message\": \"   \"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/webhook",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "webhook"
+          ]
+        },
+        "description": "Checks validation for whitespace-only messages."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Reply asks for a valid message\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.reply).to.eql(\"Please send a valid message.\");",
+              "});"
+            ]
+          }
+        }
+      ],
+      "response": []
+    }
+    ,
+    {
+      "name": "Breast Cancer -> Info",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"sender\": \"+91-9876543210\",\n  \"message\": \"Tell me about breast cancer\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/webhook",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "webhook"
+          ]
+        },
+        "description": "Requests breast cancer information."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Reply contains BREAST CANCER info\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.reply).to.include(\"BREAST CANCER INFORMATION\");",
+              "});"
+            ]
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "Screening -> Programs",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"sender\": \"+91-9876543210\",\n  \"message\": \"cancer screening\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/webhook",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "webhook"
+          ]
+        },
+        "description": "Checks screening program response."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Reply mentions screening\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.reply).to.include(\"CANCER SCREENING\");",
+              "});"
+            ]
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "Emotional Support -> Counseling",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"sender\": \"+91-9876543210\",\n  \"message\": \"I need emotional support\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/webhook",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "webhook"
+          ]
+        },
+        "description": "Checks emotional support response."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Reply mentions counseling\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.reply).to.include(\"Counseling\");",
+              "});"
+            ]
+          }
+        }
+      ],
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8888"
+    }
+  ]
+}
